@@ -11,9 +11,11 @@ import am.mtgtrade.app.ui.theme.AppTheme
 import am.mtgtrade.app.ui.views.AccountView
 import am.mtgtrade.app.ui.views.CardInfoView
 import am.mtgtrade.app.ui.views.TradeView
+import am.mtgtrade.app.viewmodels.LoginViewModel
 import android.content.ContentValues.TAG
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.compose.material.*
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.NavHost
@@ -23,10 +25,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 //    private lateinit var auth: FirebaseAuth
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 //        auth = Firebase.auth
