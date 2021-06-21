@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "81767389003",
+    "project_id": "mtdtrade-2ebfd",
+    "storage_bucket": "mtdtrade-2ebfd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81767389003:android:48ccddf679fedd865f7ace",
+        "android_client_info": {
+          "package_name": "am.mtgtrade.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "81767389003-ri4jvudulqm9r21fui63dsasvbkqltg9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyPucWbaLVSDzIBLd9U-7c6M3H-MLB-gk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "81767389003-ri4jvudulqm9r21fui63dsasvbkqltg9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
