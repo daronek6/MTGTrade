@@ -11,10 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoginView() {
+fun RegisterView() {
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier
@@ -26,8 +27,11 @@ fun LoginView() {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         ) {
+            RegisterHeader()
 
-            LoginHeader()
+            NickInput()
+
+            Spacer(Modifier.height(16.dp))
 
             EmailInput()
 
@@ -37,20 +41,31 @@ fun LoginView() {
 
             Spacer(Modifier.height(16.dp))
 
-            LoginButton()
-
-            Spacer(Modifier.height(16.dp))
-
             RegisterButton()
+
         }
     }
+}
+
+@Composable
+private fun NickInput() {
+    OutlinedTextField(
+        value = "",
+        onValueChange = {},
+        label = {
+            Text(text = "Nick")
+        },
+        singleLine = true,
+        modifier = Modifier
+            .fillMaxWidth()
+    )
 }
 
 @Composable
 private fun RegisterButton() {
     Button(
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colors.primary
+            backgroundColor = MaterialTheme.colors.secondary
         ),
         shape = MaterialTheme.shapes.medium,
         onClick = {
@@ -62,23 +77,6 @@ private fun RegisterButton() {
             .padding(horizontal = 16.dp)
     ) {
         Text(text = "Register")
-    }
-}
-
-@Composable
-private fun LoginButton() {
-    Button(
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = MaterialTheme.colors.secondary
-        ),
-        shape = MaterialTheme.shapes.medium,
-        onClick = {},
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .padding(horizontal = 16.dp)
-    ) {
-        Text(text = "Log in")
     }
 }
 
@@ -119,9 +117,9 @@ private fun EmailInput() {
 }
 
 @Composable
-private fun LoginHeader() {
+private fun RegisterHeader() {
     Text(
-        text = "Log in with email",
+        text = "Register form",
         style = MaterialTheme.typography.h4,
         modifier = Modifier
             .paddingFromBaseline(
@@ -140,8 +138,8 @@ private fun LoginHeader() {
     uiMode = Configuration.UI_MODE_NIGHT_NO,
 )
 @Composable
-private fun LoginScreenPreview() {
+private fun RegisterScreenPreview() {
     AppTheme {
-        LoginView()
+        RegisterView()
     }
 }
