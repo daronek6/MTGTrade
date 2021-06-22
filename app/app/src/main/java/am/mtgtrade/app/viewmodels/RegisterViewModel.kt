@@ -42,10 +42,14 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
     }
 
     fun onRegister() {
-        /*
-         Tu można dodać sprawdzanie czy istnieje już użytkownik z taką nazwą
-         */
+        if (name.value.isNullOrBlank() or email.value.isNullOrBlank() or password.value.isNullOrBlank()) {
+            _result.value = Resource.Error("Blank")
+        } else {
+            firebaseRegister()
+        }
+    }
 
+    fun firebaseRegister() {
         auth.createUserWithEmailAndPassword(_email.value!!, _password.value!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -59,11 +63,11 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
                     }
 
                     auth.currentUser!!.updateProfile(profileUpdates).
-                        addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Log.d(TAG, "User profile updated.")
-                            }
+                    addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            Log.d(TAG, "User profile updated.")
                         }
+                    }
 
                     _result.value = Resource.Success("User created!")
 
@@ -75,5 +79,4 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
                 }
             }
     }
-
 }

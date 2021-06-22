@@ -1,15 +1,21 @@
 package am.mtgtrade.app.ui.views
 
+import am.mtgtrade.app.ui.DrawerScreens
 import am.mtgtrade.app.ui.theme.AppTheme
+import am.mtgtrade.app.util.Resource
 import am.mtgtrade.app.viewmodels.LoginViewModel
 import am.mtgtrade.app.viewmodels.RegisterViewModel
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,6 +30,23 @@ fun RegisterView(
     viewModel: RegisterViewModel = hiltViewModel(),
     navController: NavController
 ) {
+    val nickname: String by viewModel.name.observeAsState("")
+    val email: String by viewModel.email.observeAsState("")
+    val password: String by viewModel.password.observeAsState("")
+    val result by viewModel.result.observeAsState(Resource.Loading())
+    when(result) {
+        is Resource.Success<String> -> {
+            navController.navigate(DrawerScreens.CardInfo.route) {
+                popUpTo("login") { inclusive = true }
+            }
+        }
+        is Resource.Error<String> -> {
+            Toast.makeText(LocalContext.current, "Wrong email or password", Toast.LENGTH_SHORT).show()
+        }
+        else -> {
+
+        }
+    }
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier
@@ -37,29 +60,29 @@ fun RegisterView(
         ) {
             RegisterHeader()
 
-            NickInput()
+            NickInput(nickname, viewModel::onNameUpdate)
 
             Spacer(Modifier.height(16.dp))
 
-            EmailInput()
+            EmailInput(email, viewModel::onEmailUpdate)
 
             Spacer(Modifier.height(16.dp))
 
-            PasswordInput()
+            PasswordInput(password, viewModel::onPasswordUpdate)
 
             Spacer(Modifier.height(16.dp))
 
-            RegisterButton()
+            RegisterButton(viewModel::onRegister)
 
         }
     }
 }
 
 @Composable
-private fun NickInput() {
+private fun NickInput(value: String, onTextChange: (String) -> Unit) {
     OutlinedTextField(
-        value = "",
-        onValueChange = {},
+        value = value,
+        onValueChange = { onTextChange(it) },
         label = {
             Text(text = "Nick")
         },
@@ -70,14 +93,14 @@ private fun NickInput() {
 }
 
 @Composable
-private fun RegisterButton() {
+private fun RegisterButton(onClick: () -> Unit) {
     Button(
         colors = ButtonDefaults.buttonColors(
             backgroundColor = MaterialTheme.colors.secondary
         ),
         shape = MaterialTheme.shapes.medium,
         onClick = {
-            // nawigacja
+            onClick()
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -90,10 +113,10 @@ private fun RegisterButton() {
 
 
 @Composable
-private fun PasswordInput() {
+private fun PasswordInput(value: String, onTextChange: (String) -> Unit) {
     OutlinedTextField(
-        value = "",
-        onValueChange = {},
+        value = value,
+        onValueChange = { onTextChange(it) },
         label = {
             Text(text = "Password")
         },
@@ -108,10 +131,10 @@ private fun PasswordInput() {
 }
 
 @Composable
-private fun EmailInput() {
+private fun EmailInput(value: String, onTextChange: (String) -> Unit) {
     OutlinedTextField(
-        value = "",
-        onValueChange = {},
+        value = value,
+        onValueChange = { onTextChange(it) },
         label = {
             Text(text = "Email address")
         },
