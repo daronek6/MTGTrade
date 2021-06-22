@@ -24,8 +24,8 @@ class LoginViewModel @Inject constructor() : ViewModel() {
 
     private var auth: FirebaseAuth = Firebase.auth
 
-    private val _email = MutableLiveData<String>()
-    private val _password = MutableLiveData<String>()
+    private val _email = MutableLiveData<String>("")
+    private val _password = MutableLiveData<String>("")
     private val _result = MutableLiveData<Resource<String>>()
 
     val email: LiveData<String> = _email

@@ -8,9 +8,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import am.mtgtrade.app.ui.theme.AppTheme
-import am.mtgtrade.app.ui.views.AccountView
-import am.mtgtrade.app.ui.views.CardInfoView
-import am.mtgtrade.app.ui.views.TradeView
+import am.mtgtrade.app.ui.views.*
+import am.mtgtrade.app.ui.views.trade.CreateOfferView
+import am.mtgtrade.app.ui.views.trade.FindOfferView
+import am.mtgtrade.app.ui.views.trade.MyOffersView
+import am.mtgtrade.app.ui.views.trade.OfferInfoView
 import am.mtgtrade.app.viewmodels.LoginViewModel
 import android.content.ContentValues.TAG
 import android.util.Log
@@ -29,6 +31,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
+import androidx.navigation.NavType
+import androidx.navigation.compose.navArgument
 
 
 @AndroidEntryPoint
@@ -83,8 +87,18 @@ class MainActivity : ComponentActivity() {
             ) {
                 NavHost(
                     navController = navController,
-                    startDestination = DrawerScreens.CardInfo.route
+                    startDestination = "login"
                 ) {
+                    composable("login") {
+                        LoginView(
+                            navController = navController
+                        )
+                    }
+                    composable("register") {
+                        RegisterView(
+                            navController = navController
+                        )
+                    }
                     composable(DrawerScreens.CardInfo.route) {
                         CardInfoView(
                             openDrawer = {
@@ -101,6 +115,34 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(DrawerScreens.Trade.route) {
                         TradeView(
+                            openDrawer = {
+                                openDrawer()
+                            }
+                        )
+                    }
+                    composable("myOffers") {
+                        MyOffersView(
+                            openDrawer = {
+                                openDrawer()
+                            }
+                        )
+                    }
+                    composable("createOffer") {
+                        CreateOfferView(
+                            openDrawer = {
+                                openDrawer()
+                            }
+                        )
+                    }
+                    composable("findOffer") {
+                        FindOfferView(
+                            openDrawer = {
+                                openDrawer()
+                            }
+                        )
+                    }
+                    composable("findOffer/{id}", arguments = listOf(navArgument("id") { type = NavType.LongType })) {
+                        OfferInfoView(
                             openDrawer = {
                                 openDrawer()
                             }

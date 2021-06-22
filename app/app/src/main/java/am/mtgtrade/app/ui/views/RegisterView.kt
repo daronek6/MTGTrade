@@ -1,6 +1,8 @@
 package am.mtgtrade.app.ui.views
 
 import am.mtgtrade.app.ui.theme.AppTheme
+import am.mtgtrade.app.viewmodels.LoginViewModel
+import am.mtgtrade.app.viewmodels.RegisterViewModel
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -13,9 +15,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun RegisterView() {
+fun RegisterView(
+    viewModel: RegisterViewModel = hiltViewModel(),
+    navController: NavController
+) {
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier
@@ -140,6 +148,6 @@ private fun RegisterHeader() {
 @Composable
 private fun RegisterScreenPreview() {
     AppTheme {
-        RegisterView()
+        RegisterView(navController = rememberNavController())
     }
 }

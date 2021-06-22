@@ -1,20 +1,52 @@
 package am.mtgtrade.app.ui.views
 
+import am.mtgtrade.app.ui.DrawerScreens
 import am.mtgtrade.app.ui.theme.AppTheme
+import am.mtgtrade.app.util.Resource
+import am.mtgtrade.app.viewmodels.LoginViewModel
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import android.widget.Toast
+
 
 @Composable
-fun LoginView() {
+fun LoginView(
+    viewModel: LoginViewModel = hiltViewModel(),
+    navController: NavController
+) {
+    val email: String by viewModel.email.observeAsState("")
+    val password: String by viewModel.password.observeAsState("")
+    val result by viewModel.result.observeAsState(Resource.Loading())
+
+    when(result) {
+        is Resource.Success<String> -> {
+            navController.navigate(DrawerScreens.CardInfo.route) {
+                popUpTo("login") { inclusive = true }
+            }
+        }
+        is Resource.Error<String> -> {
+            Toast.makeText(LocalContext.current, "Wrong email or password", Toast.LENGTH_SHORT).show()
+        }
+        else -> {
+
+        }
+    }
+
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier
@@ -29,32 +61,32 @@ fun LoginView() {
 
             LoginHeader()
 
-            EmailInput()
+            EmailInput(email, viewModel::onEmailUpdate)
 
             Spacer(Modifier.height(16.dp))
 
-            PasswordInput()
+            PasswordInput(password, viewModel::onPasswordUpdate)
 
             Spacer(Modifier.height(16.dp))
 
-            LoginButton()
+            LoginButton(viewModel::onLogin)
 
             Spacer(Modifier.height(16.dp))
 
-            RegisterButton()
+            RegisterButton(navController)
         }
     }
 }
 
 @Composable
-private fun RegisterButton() {
+private fun RegisterButton(navController: NavController) {
     Button(
         colors = ButtonDefaults.buttonColors(
             backgroundColor = MaterialTheme.colors.primary
         ),
         shape = MaterialTheme.shapes.medium,
         onClick = {
-            // nawigacja
+            navController.navigate("register")
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -66,13 +98,15 @@ private fun RegisterButton() {
 }
 
 @Composable
-private fun LoginButton() {
+private fun LoginButton(onClick: () -> Unit) {
     Button(
         colors = ButtonDefaults.buttonColors(
             backgroundColor = MaterialTheme.colors.secondary
         ),
         shape = MaterialTheme.shapes.medium,
-        onClick = {},
+        onClick = {
+            onClick()
+        },
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
@@ -84,10 +118,10 @@ private fun LoginButton() {
 
 
 @Composable
-private fun PasswordInput() {
+private fun PasswordInput(value: String, onTextChange: (String) -> Unit) {
     OutlinedTextField(
-        value = "",
-        onValueChange = {},
+        value = value,
+        onValueChange = { onTextChange(it) },
         label = {
             Text(text = "Password")
         },
@@ -102,10 +136,10 @@ private fun PasswordInput() {
 }
 
 @Composable
-private fun EmailInput() {
+private fun EmailInput(value: String, onTextChange: (String) -> Unit) {
     OutlinedTextField(
-        value = "",
-        onValueChange = {},
+        value = value,
+        onValueChange = { onTextChange(it) },
         label = {
             Text(text = "Email address")
         },
@@ -142,6 +176,6 @@ private fun LoginHeader() {
 @Composable
 private fun LoginScreenPreview() {
     AppTheme {
-        LoginView()
+        LoginView(navController = rememberNavController())
     }
 }
