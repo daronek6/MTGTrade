@@ -1,20 +1,26 @@
 package am.mtgtrade.app.ui.views.trade
 
 import am.mtgtrade.app.ui.TopBar
+import am.mtgtrade.app.ui.models.Offer
 import am.mtgtrade.app.ui.theme.AppTheme
+import am.mtgtrade.app.viewmodels.MyOffersViewModel
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun MyOffersView(openDrawer: () -> Unit) {
@@ -29,28 +35,28 @@ fun MyOffersView(openDrawer: () -> Unit) {
 }
 
 @Composable
-fun MyOffersContent() {
+fun MyOffersContent(viewModel: MyOffersViewModel = hiltViewModel()) {
+    val offers by viewModel.myOffers.observeAsState(listOf<Offer>())
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier
             .fillMaxSize(),
     ) {
-        LazyColumn(
+        Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding = PaddingValues(vertical = 8.dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         ) {
-            items(5) {
-                Offer()
+            offers.forEach {
+                Offer(it)
             }
         }
     }
 }
 
 @Composable
-private fun Offer() {
+private fun Offer(offer: Offer, viewModel: MyOffersViewModel = hiltViewModel()) {
     Card() {
         Row(
             modifier = Modifier
@@ -59,12 +65,12 @@ private fun Offer() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column() {
-                LineOfInfo(text = "Username: ")
-                LineOfInfo(text = "Card name: ")
-                LineOfInfo(text = "Date: ")
+                LineOfInfo(text = "Username: ${offer.userName}")
+                LineOfInfo(text = "Card name: ${offer.cardName}")
+                LineOfInfo(text = "Date: ${offer.date}")
             }
             Column() {
-                FloatingActionButton(onClick = { /*do something*/ }) {
+                FloatingActionButton(onClick = { viewModel.removeOffer(offer.id!!) }) {
                     Icon(Icons.Filled.Delete, contentDescription = "Delete offer")
                 }
             }
@@ -76,7 +82,7 @@ private fun Offer() {
 @Composable
 fun LineOfInfo(text: String) {
     Text(
-        text = text.plus("Info from vm") 
+        text = text
     )
 }
 

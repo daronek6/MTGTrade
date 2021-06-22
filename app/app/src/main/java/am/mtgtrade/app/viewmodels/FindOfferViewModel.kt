@@ -15,35 +15,32 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class MyOffersViewModel @Inject constructor(): ViewModel() {
+class FindOfferViewModel @Inject constructor(): ViewModel() {
 
     private var auth: FirebaseAuth = Firebase.auth
     val db = Firebase.firestore
 
-    init {
-        onLoad()
+    private val _search = MutableLiveData<String>()
+    private val _offers = MutableLiveData<List<Offer>>()
+
+    val search: LiveData<String> = _search
+    val offers: LiveData<List<Offer>> = _offers
+
+    fun onSearchUpdate(searchUpdate: String) {
+        _search.value = searchUpdate
     }
 
-    private val _myOffers = MutableLiveData<List<Offer>>()
-
-    val myOffers: LiveData<List<Offer>> = _myOffers
-
-    fun onLoad() {
+    fun onSearch() {
         db.collection("offers")
-            .whereEqualTo("userEmail", auth.currentUser!!.email)
+            .whereEqualTo("cardName", _search.value)
             .get().addOnSuccessListener { results ->
-                _myOffers.value = results.toObjects<Offer>()
+                _offers.value = results.toObjects<Offer>()
+                Log.d(TAG, "Found ${_offers.value}")
             }
     }
 
-    fun removeOffer(offerId: String) {
-
-        db.collection("offers")
-            .document(offerId)
-            .delete()
-            .addOnSuccessListener {
-                Log.d(TAG, "Removed offer!")
-                onLoad()
-            }
+    fun isOfferFromCurrentUser(offer: Offer): Boolean {
+        return (auth.currentUser!!.email == offer.userEmail)
     }
+
 }

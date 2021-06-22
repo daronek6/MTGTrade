@@ -47,7 +47,7 @@ class CardInfoViewModel @Inject constructor(): ViewModel() {
                 try {
                     _cardInfo.value = TypeConverter.MtgCardToCardInfo(searchResult.body()!!.first())
                     updateResult()
-                } catch (e:NoSuchElementException) {
+                } catch (e:Exception) {
                     _name.value = "Nie znaleziono"
                     _rarity.value = ""
                     _setName.value = ""

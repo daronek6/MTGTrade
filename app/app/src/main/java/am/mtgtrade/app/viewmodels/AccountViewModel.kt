@@ -39,10 +39,8 @@ class AccountViewModel @Inject constructor(): ViewModel() {
 //        _phone.value = phoneUpdated
 //    }
 
-    fun onProfileUpdate() {
-        /*
-        Wygląda na to, że nie wiele informacji da się zmienić
-         */
+    fun onLogOut() {
+       auth.signOut()
     }
 
 }

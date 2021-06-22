@@ -33,8 +33,10 @@ fun LoginView(
 ) {
     val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
     user.let {
-        navController.navigate(DrawerScreens.CardInfo.route) {
-            popUpTo("login") { inclusive = true }
+        if(it != null) {
+            navController.navigate(DrawerScreens.CardInfo.route) {
+                popUpTo("login") { inclusive = true }
+            }
         }
     }
 

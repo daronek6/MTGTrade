@@ -20,21 +20,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun AccountView(openDrawer: () -> Unit) {
+fun AccountView(
+    openDrawer: () -> Unit,
+    navController: NavController
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
             title = "Account",
             buttonIcon = Icons.Filled.Menu,
             onButtonClicked = { openDrawer() }
         )
-        AccountContent()
+        AccountContent(navController)
     }
 }
 
 @Composable
-fun AccountContent(viewModel: AccountViewModel = hiltViewModel()) {
+fun AccountContent(
+    navController: NavController,
+    viewModel: AccountViewModel = hiltViewModel()
+) {
     val name: String by viewModel.name.observeAsState("")
     val email: String by viewModel.email.observeAsState("")
     val phone: String by viewModel.phone.observeAsState("")
@@ -54,7 +62,7 @@ fun AccountContent(viewModel: AccountViewModel = hiltViewModel()) {
             Text(text = "Email: $email")
             Text(text = "Phone Number: $phone")
             Spacer(modifier = Modifier.height(16.dp))
-            //EditButton()
+            LogOutButton(navController)
         }
     }
 }
@@ -85,19 +93,20 @@ fun TextWithInput(text: String, keyboard: KeyboardType) {
 }
 
 @Composable
-fun EditButton() {
+fun LogOutButton(navController: NavController, viewModel: AccountViewModel = hiltViewModel()) {
     Button(
         colors = ButtonDefaults.buttonColors(
             backgroundColor = MaterialTheme.colors.secondary
         ),
         shape = MaterialTheme.shapes.medium,
-        onClick = {},
+        onClick = { viewModel.onLogOut()
+                   navController.navigate("login")},
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
             .padding(horizontal = 16.dp)
     ) {
-        Text(text = "Update Information")
+        Text(text = "Wyloguj!")
     }
 }
 
@@ -112,6 +121,6 @@ fun EditButton() {
 @Composable
 private fun AccountScreenPreview() {
     AppTheme {
-        AccountContent()
+        AccountContent(rememberNavController())
     }
 }
