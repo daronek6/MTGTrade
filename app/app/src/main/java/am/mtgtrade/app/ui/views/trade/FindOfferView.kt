@@ -1,12 +1,13 @@
-package am.mtgtrade.app.ui.views
+package am.mtgtrade.app.ui.views.trade
 
 import am.mtgtrade.app.R
 import am.mtgtrade.app.ui.TopBar
 import am.mtgtrade.app.ui.theme.AppTheme
 import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -16,18 +17,17 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.ImeOptions
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CardInfoView(openDrawer: () -> Unit) {
+fun FindOfferView(openDrawer: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
-            title = "Card Info",
+            title = "Find Offer",
             buttonIcon = Icons.Filled.Menu,
             onButtonClicked = { openDrawer() }
         )
@@ -44,12 +44,12 @@ private fun ScaffoldedContent() {
             }
         }
     ) {
-        CardInfoContent()
+        FindOfferContent()
     }
 }
 
 @Composable
-fun CardInfoContent() {
+fun FindOfferContent() {
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier
@@ -62,12 +62,7 @@ fun CardInfoContent() {
                 .padding(horizontal = 16.dp),
         ) {
             SearchInput()
-
-            Spacer(Modifier.height(16.dp))
-
-            CardInfo()
-
-            Spacer(Modifier.height(16.dp))
+            OffersLazyColumn()
         }
     }
 }
@@ -78,7 +73,7 @@ private fun SearchInput() {
         value = "",
         onValueChange = {},
         label = {
-            Text(text = "Find a card")
+            Text(text = "Find an offer")
         },
         leadingIcon = {
             Icon(
@@ -94,7 +89,7 @@ private fun SearchInput() {
         ),
         keyboardActions = KeyboardActions(
             onSearch = {
-            Log.e("*****", "SEEEEEARCH")
+                Log.e("*****", "SEEEEEARCH")
             }),
         modifier = Modifier
             .fillMaxWidth()
@@ -102,17 +97,32 @@ private fun SearchInput() {
 }
 
 @Composable
-fun CardInfo() {
-    Card(
-        shape = RoundedCornerShape(3.dp),
+fun OffersLazyColumn() {
+    LazyColumn(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        contentPadding = PaddingValues(vertical = 8.dp),
         modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 16.dp),
     ) {
-        Text(
-            text = "Card",
-            modifier = Modifier.padding(16.dp)
-        )
+        items(5) {
+            Offer()
+        }
     }
+}
+
+@Composable
+private fun Offer() {
+    Card(
+        modifier = Modifier.clickable {  }
+    ) {
+        Column() {
+            LineOfInfo(text = "Username: ")
+            LineOfInfo(text = "Card name: ")
+            LineOfInfo(text = "Date: ")
+        }
+    }
+    Divider(color = Color.Blue, thickness = 1.dp)
 }
 
 @Preview(
@@ -124,7 +134,7 @@ fun CardInfo() {
     uiMode = Configuration.UI_MODE_NIGHT_NO,
 )
 @Composable
-private fun CardInfoScreenPreview() {
+private fun AccountScreenPreview() {
     AppTheme {
         ScaffoldedContent()
     }

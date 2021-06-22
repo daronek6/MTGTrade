@@ -1,33 +1,27 @@
-package am.mtgtrade.app.ui.views
+package am.mtgtrade.app.ui.views.trade
 
 import am.mtgtrade.app.R
 import am.mtgtrade.app.ui.TopBar
 import am.mtgtrade.app.ui.theme.AppTheme
 import android.content.res.Configuration
-import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.ImeOptions
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 @Composable
-fun CardInfoView(openDrawer: () -> Unit) {
+fun CreateOfferView(openDrawer: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
-            title = "Card Info",
+            title = "Create Offer",
             buttonIcon = Icons.Filled.Menu,
             onButtonClicked = { openDrawer() }
         )
@@ -44,12 +38,12 @@ private fun ScaffoldedContent() {
             }
         }
     ) {
-        CardInfoContent()
+        CreateOfferContent()
     }
 }
 
 @Composable
-fun CardInfoContent() {
+fun CreateOfferContent() {
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier
@@ -61,57 +55,62 @@ fun CardInfoContent() {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         ) {
-            SearchInput()
-
-            Spacer(Modifier.height(16.dp))
-
-            CardInfo()
-
-            Spacer(Modifier.height(16.dp))
+            CardNameInput()
+            Spacer(modifier = Modifier.height(16.dp))
+            CardImage()
+            Spacer(modifier = Modifier.height(16.dp))
+            CreateOfferButton()
         }
     }
 }
 
 @Composable
-private fun SearchInput() {
-    OutlinedTextField(
-        value = "",
-        onValueChange = {},
-        label = {
-            Text(text = "Find a card")
-        },
-        leadingIcon = {
-            Icon(
-                Icons.Default.Search,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(18.dp)
-            )
-        },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Search
-        ),
-        keyboardActions = KeyboardActions(
-            onSearch = {
-            Log.e("*****", "SEEEEEARCH")
-            }),
+private fun CardNameInput() {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = "Card Name: ",
+            fontSize = 18.sp,
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+        )
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            label = {
+                Text(text = "Card Name")
+            },
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+        )
+    }
+}
+
+@Composable
+private fun CardImage() {
+    Image(
+        painter = painterResource(id = R.drawable.common_full_open_on_phone),
+        contentDescription = "Card's photo",
         modifier = Modifier
             .fillMaxWidth()
+            .height(560.dp)
     )
 }
 
 @Composable
-fun CardInfo() {
-    Card(
-        shape = RoundedCornerShape(3.dp),
+private fun CreateOfferButton() {
+    Button(
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = MaterialTheme.colors.secondary
+        ),
+        shape = MaterialTheme.shapes.medium,
+        onClick = {},
         modifier = Modifier
             .fillMaxWidth()
+            .height(48.dp)
+            .padding(horizontal = 16.dp)
     ) {
-        Text(
-            text = "Card",
-            modifier = Modifier.padding(16.dp)
-        )
+        Text(text = "Create Offer")
     }
 }
 
@@ -124,7 +123,7 @@ fun CardInfo() {
     uiMode = Configuration.UI_MODE_NIGHT_NO,
 )
 @Composable
-private fun CardInfoScreenPreview() {
+private fun AccountScreenPreview() {
     AppTheme {
         ScaffoldedContent()
     }

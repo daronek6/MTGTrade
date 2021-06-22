@@ -1,11 +1,7 @@
 package am.mtgtrade.app.ui.views.trade
 
-import am.mtgtrade.app.R
 import am.mtgtrade.app.ui.TopBar
 import am.mtgtrade.app.ui.theme.AppTheme
-import am.mtgtrade.app.ui.views.CardInfo
-import am.mtgtrade.app.ui.views.ScaffoldedContent
-import am.mtgtrade.app.ui.views.SearchInput
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,16 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 @Composable
 fun MyOffersView(openDrawer: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
-            title = "Card Info",
+            title = "My Offers",
             buttonIcon = Icons.Filled.Menu,
             onButtonClicked = { openDrawer() }
         )
@@ -56,7 +50,7 @@ fun MyOffersContent() {
 }
 
 @Composable
-fun Offer() {
+private fun Offer() {
     Card() {
         Row(
             modifier = Modifier
