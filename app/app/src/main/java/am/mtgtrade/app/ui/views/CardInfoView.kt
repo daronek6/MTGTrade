@@ -3,6 +3,7 @@ package am.mtgtrade.app.ui.views
 import am.mtgtrade.app.R
 import am.mtgtrade.app.ui.TopBar
 import am.mtgtrade.app.ui.theme.AppTheme
+import am.mtgtrade.app.viewmodels.CardInfoViewModel
 import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.layout.*
@@ -14,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,6 +24,8 @@ import androidx.compose.ui.text.input.ImeOptions
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.runtime.livedata.observeAsState
 
 @Composable
 fun CardInfoView(openDrawer: () -> Unit) {
@@ -73,10 +77,12 @@ fun CardInfoContent() {
 }
 
 @Composable
-private fun SearchInput() {
+private fun SearchInput(viewModel:CardInfoViewModel = hiltViewModel()) {
+    val search: String by viewModel.search.observeAsState("")
+
     OutlinedTextField(
-        value = "",
-        onValueChange = {},
+        value = search,
+        onValueChange = { viewModel.onSearchUpdate(it) },
         label = {
             Text(text = "Find a card")
         },
@@ -94,7 +100,8 @@ private fun SearchInput() {
         ),
         keyboardActions = KeyboardActions(
             onSearch = {
-            Log.e("*****", "SEEEEEARCH")
+                viewModel.onSearch()
+                Log.e("*****", "SEEEEEARCH")
             }),
         modifier = Modifier
             .fillMaxWidth()
@@ -102,17 +109,57 @@ private fun SearchInput() {
 }
 
 @Composable
-fun CardInfo() {
-    Card(
-        shape = RoundedCornerShape(3.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        Text(
-            text = "Card",
-            modifier = Modifier.padding(16.dp)
-        )
+fun CardInfo(viewModel: CardInfoViewModel = hiltViewModel()) {
+    val cardName: String by viewModel.name.observeAsState("")
+    val rarity: String by viewModel.rarity.observeAsState("")
+    val setName: String by viewModel.setName.observeAsState("")
+
+    Column() {
+        Card(
+            shape = RoundedCornerShape(3.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Card",
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+
+        Card(
+            shape = RoundedCornerShape(3.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Nazwa: $cardName",
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+
+        Card(
+            shape = RoundedCornerShape(3.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Rzadkość: $rarity",
+                modifier = Modifier.padding(16.dp)
+            )
+        }
+
+        Card(
+            shape = RoundedCornerShape(3.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            Text(
+                text = "Kolekcja: $setName",
+                modifier = Modifier.padding(16.dp)
+            )
+        }
     }
+
 }
 
 @Preview(
