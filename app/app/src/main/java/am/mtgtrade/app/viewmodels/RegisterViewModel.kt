@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
@@ -49,7 +48,7 @@ class RegisterViewModel @Inject constructor(): ViewModel() {
         }
     }
 
-    fun firebaseRegister() {
+    private fun firebaseRegister() {
         auth.createUserWithEmailAndPassword(_email.value!!, _password.value!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {

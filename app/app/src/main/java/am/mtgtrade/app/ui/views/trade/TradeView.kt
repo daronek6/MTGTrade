@@ -12,21 +12,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.navArgument
+import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun AccountView(openDrawer: () -> Unit) {
+fun TradeView(
+    openDrawer: () -> Unit,
+    navController: NavController
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
             title = "Trade",
             buttonIcon = Icons.Filled.Menu,
             onButtonClicked = { openDrawer() }
         )
-        TradeContent()
+        TradeContent(navController)
     }
 }
 
 @Composable
-private fun TradeContent() {
+private fun TradeContent(navController: NavController) {
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier
@@ -39,23 +45,27 @@ private fun TradeContent() {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         ) {
-            TradeButton("Find offer")
+            TradeButton("Find offer", navController, "findOffer")
             Spacer(modifier = Modifier.height(24.dp))
-            TradeButton("Create offer")
+            TradeButton("Create offer", navController,"createOffer")
             Spacer(modifier = Modifier.height(24.dp))
-            TradeButton("My offers")
+            TradeButton("My offers", navController, "myOffers")
         }
     }
 }
 
 @Composable
-private fun TradeButton(text: String) {
+private fun TradeButton(
+    text: String,
+    navController: NavController,
+    route: String
+) {
     Button(
         colors = ButtonDefaults.buttonColors(
             backgroundColor = MaterialTheme.colors.secondary
         ),
         shape = MaterialTheme.shapes.medium,
-        onClick = {},
+        onClick = { navController.navigate(route) },
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
@@ -76,6 +86,6 @@ private fun TradeButton(text: String) {
 @Composable
 private fun AccountScreenPreview() {
     AppTheme {
-        TradeContent()
+        TradeContent(navController = rememberNavController())
     }
 }
