@@ -40,7 +40,7 @@ fun ScaffoldedContent() {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { /*do something*/ }) {
-                Icon(painterResource(id = R.drawable.ic_baseline_photo_camera_24), contentDescription = "Localized description")
+                Icon(painterResource(id = R.drawable.ic_baseline_photo_camera_24), contentDescription = "Turn on camera")
             }
         }
     ) {
