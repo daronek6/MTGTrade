@@ -5,7 +5,9 @@ import am.mtgtrade.app.util.Resource
 import android.content.ContentValues.TAG
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,8 +26,8 @@ class LoginViewModel @Inject constructor() : ViewModel() {
 
     private var auth: FirebaseAuth = Firebase.auth
 
-    private val _email = MutableLiveData<String>("")
-    private val _password = MutableLiveData<String>("")
+    private val _email = MutableLiveData("")
+    private val _password = MutableLiveData("")
     private val _result = MutableLiveData<Resource<String>>()
 
     val email: LiveData<String> = _email
@@ -41,7 +43,14 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     }
 
     fun onLogin() {
-        var result: Boolean = false;
+        if (_email.value.isNullOrBlank() or _password.value.isNullOrBlank()) {
+            _result.value = Resource.Error("No values")
+        } else {
+            firebaseLogin()
+        }
+    }
+
+    private fun firebaseLogin() {
         auth.signInWithEmailAndPassword(_email.value!!, _password.value!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
