@@ -3,11 +3,15 @@ package am.mtgtrade.app.viewmodels
 import am.mtgtrade.app.util.Resource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ProfileViewModel {
+@HiltViewModel
+class AccountViewModel @Inject constructor(): ViewModel() {
 
     private var auth: FirebaseAuth = Firebase.auth
 
@@ -15,6 +19,10 @@ class ProfileViewModel {
     private val _email = MutableLiveData<String>()
     private val _phone = MutableLiveData<String>()
     private val _result = MutableLiveData<Resource<String>>()
+
+    init {
+        onLoad()
+    }
 
     val name: LiveData<String> = _name
     val email: LiveData<String> = _email

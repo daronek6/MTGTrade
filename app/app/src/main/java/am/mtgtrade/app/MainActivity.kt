@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 //        auth = Firebase.auth
 
-        val policy = ThreadPolicy.Builder().permitAll().build()
+        val policy = ThreadPolicy.Builder().permitNetwork().build()
         StrictMode.setThreadPolicy(policy)
 
         super.onCreate(savedInstanceState)

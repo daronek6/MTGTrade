@@ -2,6 +2,8 @@ package am.mtgtrade.app.ui.views
 
 import am.mtgtrade.app.ui.TopBar
 import am.mtgtrade.app.ui.theme.AppTheme
+import am.mtgtrade.app.viewmodels.AccountViewModel
+import am.mtgtrade.app.viewmodels.CardInfoViewModel
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -9,12 +11,15 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun AccountView(openDrawer: () -> Unit) {
@@ -29,7 +34,11 @@ fun AccountView(openDrawer: () -> Unit) {
 }
 
 @Composable
-fun AccountContent() {
+fun AccountContent(viewModel: AccountViewModel = hiltViewModel()) {
+    val name: String by viewModel.name.observeAsState("")
+    val email: String by viewModel.email.observeAsState("")
+    val phone: String by viewModel.phone.observeAsState("")
+
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier
@@ -41,11 +50,11 @@ fun AccountContent() {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         ) {
-            TextWithInput(text = "Nick", keyboard = KeyboardType.Text)
-            TextWithInput(text = "Email", keyboard = KeyboardType.Email)
-            TextWithInput(text = "Phone Number", keyboard = KeyboardType.Phone)
+            Text(text = "Name: $name")
+            Text(text = "Email: $email")
+            Text(text = "Phone Number: $phone")
             Spacer(modifier = Modifier.height(16.dp))
-            EditButton()
+            //EditButton()
         }
     }
 }

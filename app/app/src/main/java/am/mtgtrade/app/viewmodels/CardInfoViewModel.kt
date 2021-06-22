@@ -40,7 +40,8 @@ class CardInfoViewModel @Inject constructor(): ViewModel() {
     }
 
     fun onSearch() {
-        viewModelScope.launch {
+        viewModelScope.run {
+
             val searchResult: Response<List<MtgCard>> = MtgCardApiClient.getCardsByPartialName(_search.value!!, 1, 1)
             if(searchResult.isSuccessful) {
                 try {
