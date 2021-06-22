@@ -20,30 +20,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.ImeOptions
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun CardInfoView(openDrawer: () -> Unit) {
+fun CardInfoView(
+    openDrawer: () -> Unit,
+    navController: NavController
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
             title = "Card Info",
             buttonIcon = Icons.Filled.Menu,
             onButtonClicked = { openDrawer() }
         )
-        ScaffoldedContent()
+        ScaffoldedContent(navController)
     }
 }
 
 @Composable
-private fun ScaffoldedContent() {
+private fun ScaffoldedContent(navController: NavController) {
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*do something*/ }) {
+            FloatingActionButton(onClick = { navController.navigate("camera") }) {
                 Icon(painterResource(id = R.drawable.ic_baseline_photo_camera_24), contentDescription = "Turn on camera")
             }
         }
@@ -114,7 +117,7 @@ fun CardInfo(viewModel: CardInfoViewModel = hiltViewModel()) {
     val rarity: String by viewModel.rarity.observeAsState("")
     val setName: String by viewModel.setName.observeAsState("")
 
-    Column() {
+    Column {
         Card(
             shape = RoundedCornerShape(3.dp),
             modifier = Modifier
@@ -173,6 +176,6 @@ fun CardInfo(viewModel: CardInfoViewModel = hiltViewModel()) {
 @Composable
 private fun CardInfoScreenPreview() {
     AppTheme {
-        ScaffoldedContent()
+        ScaffoldedContent(navController = rememberNavController())
     }
 }

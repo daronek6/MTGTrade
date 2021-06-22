@@ -31,12 +31,12 @@ fun LoginView(
     viewModel: LoginViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
-    user.let {
-        navController.navigate(DrawerScreens.CardInfo.route) {
-            popUpTo("login") { inclusive = true }
-        }
-    }
+//    val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+//    user.let {
+//        navController.navigate(DrawerScreens.CardInfo.route) {
+//            popUpTo("login") { inclusive = true }
+//        }
+//    }
 
     val email: String by viewModel.email.observeAsState("")
     val password: String by viewModel.password.observeAsState("")

@@ -6,40 +6,31 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import am.mtgtrade.app.ui.theme.AppTheme
 import am.mtgtrade.app.ui.views.*
-import am.mtgtrade.app.ui.views.trade.CreateOfferView
-import am.mtgtrade.app.ui.views.trade.FindOfferView
-import am.mtgtrade.app.ui.views.trade.MyOffersView
-import am.mtgtrade.app.ui.views.trade.OfferInfoView
-import am.mtgtrade.app.viewmodels.LoginViewModel
-import android.content.ContentValues.TAG
-import android.util.Log
-import android.widget.Toast
-import androidx.activity.viewModels
+import am.mtgtrade.app.ui.views.camera.SimpleCameraPreview
+import am.mtgtrade.app.ui.views.trade.*
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.compose.material.*
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavType
 import androidx.navigation.compose.navArgument
+import java.io.File
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 //    private lateinit var auth: FirebaseAuth
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
 //        auth = Firebase.auth
@@ -48,18 +39,33 @@ class MainActivity : ComponentActivity() {
         StrictMode.setThreadPolicy(policy)
 
         super.onCreate(savedInstanceState)
+        if (allPermissionsGranted()) {
+            setViewContent()
+        } else {
+            ActivityCompat.requestPermissions(
+                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            )
+        }
+    }
+
+    private fun setViewContent() {
         setContent {
             AppTheme {
                 AppMainScreen()
             }
         }
-
     }
 
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            baseContext, it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
 
     @Composable
     fun AppMainScreen() {
         val navController = rememberNavController()
+
         Surface(color = MaterialTheme.colors.background) {
             val drawerState = rememberDrawerState(DrawerValue.Closed)
             val scope = rememberCoroutineScope()
@@ -103,7 +109,8 @@ class MainActivity : ComponentActivity() {
                         CardInfoView(
                             openDrawer = {
                                 openDrawer()
-                            }
+                            },
+                            navController = navController
                         )
                     }
                     composable(DrawerScreens.Account.route) {
@@ -117,7 +124,8 @@ class MainActivity : ComponentActivity() {
                         TradeView(
                             openDrawer = {
                                 openDrawer()
-                            }
+                            },
+                            navController = navController
                         )
                     }
                     composable("myOffers") {
@@ -148,10 +156,20 @@ class MainActivity : ComponentActivity() {
                             }
                         )
                     }
+                    composable("camera") {
+                        SimpleCameraPreview()
+                    }
                 }
             }
         }
     }
+
+    companion object {
+        private const val REQUEST_CODE_PERMISSIONS = 10
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private const val IMMERSIVE_FLAG_TIMEOUT = 500L
+    }
+
 
 //    public override fun onStart() {
 //        super.onStart()
