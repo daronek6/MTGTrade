@@ -1,35 +1,32 @@
-package am.mtgtrade.app.ui.views
+package am.mtgtrade.app.ui.views.trade
 
 import am.mtgtrade.app.ui.TopBar
 import am.mtgtrade.app.ui.theme.AppTheme
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @Composable
 fun AccountView(openDrawer: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
-            title = "Account",
+            title = "Trade",
             buttonIcon = Icons.Filled.Menu,
             onButtonClicked = { openDrawer() }
         )
-        AccountContent()
+        TradeContent()
     }
 }
 
 @Composable
-fun AccountContent() {
+private fun TradeContent() {
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier
@@ -37,46 +34,22 @@ fun AccountContent() {
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         ) {
-            TextWithInput(text = "Nick", keyboard = KeyboardType.Text)
-            TextWithInput(text = "Email", keyboard = KeyboardType.Email)
-            TextWithInput(text = "Phone Number", keyboard = KeyboardType.Phone)
-            Spacer(modifier = Modifier.height(16.dp))
-            EditButton()
+            TradeButton("Find offer")
+            Spacer(modifier = Modifier.height(24.dp))
+            TradeButton("Create offer")
+            Spacer(modifier = Modifier.height(24.dp))
+            TradeButton("My offers")
         }
     }
 }
 
 @Composable
-fun TextWithInput(text: String, keyboard: KeyboardType) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(
-            text = text.plus(":"),
-            fontSize = 18.sp,
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-        )
-        OutlinedTextField(
-            value = "",
-            onValueChange = {},
-            label = {
-                Text(text = text)
-            },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = keyboard
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-        )
-    }
-}
-
-@Composable
-fun EditButton() {
+private fun TradeButton(text: String) {
     Button(
         colors = ButtonDefaults.buttonColors(
             backgroundColor = MaterialTheme.colors.secondary
@@ -88,7 +61,7 @@ fun EditButton() {
             .height(48.dp)
             .padding(horizontal = 16.dp)
     ) {
-        Text(text = "Update Information")
+        Text(text = text)
     }
 }
 
@@ -103,6 +76,6 @@ fun EditButton() {
 @Composable
 private fun AccountScreenPreview() {
     AppTheme {
-        AccountContent()
+        TradeContent()
     }
 }

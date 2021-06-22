@@ -31,15 +31,20 @@ fun CardInfoView(openDrawer: () -> Unit) {
             buttonIcon = Icons.Filled.Menu,
             onButtonClicked = { openDrawer() }
         )
-        Scaffold(
-            floatingActionButton = {
-                FloatingActionButton(onClick = { /*do something*/ }) {
-                    Icon(painterResource(id = R.drawable.ic_baseline_photo_camera_24), contentDescription = "Localized description")
-                }
+        ScaffoldedContent()
+    }
+}
+
+@Composable
+fun ScaffoldedContent() {
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = { /*do something*/ }) {
+                Icon(painterResource(id = R.drawable.ic_baseline_photo_camera_24), contentDescription = "Localized description")
             }
-        ) {
-            CardInfoContent()
         }
+    ) {
+        CardInfoContent()
     }
 }
 
@@ -121,6 +126,6 @@ fun CardInfo() {
 @Composable
 private fun CardInfoScreenPreview() {
     AppTheme {
-        CardInfoContent()
+        ScaffoldedContent()
     }
 }
