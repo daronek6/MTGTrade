@@ -7,6 +7,7 @@ import am.mtgtrade.app.ui.theme.AppTheme
 import am.mtgtrade.app.viewmodels.FindOfferViewModel
 import android.content.ContentValues.TAG
 import android.content.res.Configuration
+import am.mtgtrade.app.viewmodels.SearchOffersViewModel
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -25,11 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 
 @Composable
 fun FindOfferView(openDrawer: () -> Unit, navController: NavController) {
@@ -47,7 +49,7 @@ fun FindOfferView(openDrawer: () -> Unit, navController: NavController) {
 private fun ScaffoldedContent(navController: NavController) {
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*do something*/ }) {
+            FloatingActionButton(onClick = { navController.navigate("camera") }) {
                 Icon(painterResource(id = R.drawable.ic_baseline_photo_camera_24), contentDescription = "Turn on camera")
             }
         }
@@ -140,17 +142,17 @@ private fun Offer(offer: Offer, navController: NavController) {
     Divider(color = Color.Blue, thickness = 1.dp)
 }
 
-@Preview(
-    name = "Night Mode",
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-)
-@Preview(
-    name = "Day Mode",
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-)
-@Composable
-private fun AccountScreenPreview() {
-    AppTheme {
-        ScaffoldedContent(rememberNavController())
-    }
-}
+//@Preview(
+//    name = "Night Mode",
+//    uiMode = Configuration.UI_MODE_NIGHT_YES,
+//)
+//@Preview(
+//    name = "Day Mode",
+//    uiMode = Configuration.UI_MODE_NIGHT_NO,
+//)
+//@Composable
+//private fun AccountScreenPreview() {
+//    AppTheme {
+//        ScaffoldedContent()
+//    }
+//}

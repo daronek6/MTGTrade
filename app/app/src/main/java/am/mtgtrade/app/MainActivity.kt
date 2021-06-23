@@ -8,6 +8,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import am.mtgtrade.app.ui.theme.AppTheme
 import am.mtgtrade.app.ui.views.*
+import am.mtgtrade.app.ui.views.camera.SimpleCameraPreview
+import am.mtgtrade.app.ui.views.trade.*
+import android.Manifest
+import android.content.pm.PackageManager
 import am.mtgtrade.app.ui.views.trade.*
 import androidx.compose.material.*
 import androidx.compose.runtime.rememberCoroutineScope
@@ -18,15 +22,18 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavType
 import androidx.navigation.compose.navArgument
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import java.io.File
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-//    private lateinit var auth: FirebaseAuth
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
 //        auth = Firebase.auth
@@ -35,18 +42,57 @@ class MainActivity : ComponentActivity() {
         StrictMode.setThreadPolicy(policy)
 
         super.onCreate(savedInstanceState)
+        if (allPermissionsGranted()) {
+            setViewContent()
+        } else {
+            ActivityCompat.requestPermissions(
+                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            )
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (allPermissionsGranted()) {
+                setViewContent()
+            } else {
+                Toast.makeText(
+                    this,
+                    getString(R.string.permission_message),
+                    Toast.LENGTH_SHORT
+                ).show()
+                finish()
+            }
+        }
+    }
+
+    private fun setViewContent() {
         setContent {
             AppTheme {
                 AppMainScreen()
             }
         }
-
     }
 
+    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+        ContextCompat.checkSelfPermission(
+            baseContext, it
+        ) == PackageManager.PERMISSION_GRANTED
+    }
 
     @Composable
     fun AppMainScreen() {
         val navController = rememberNavController()
+
+        val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        var startDest = "login"
+        if (user != null) {
+            startDest = DrawerScreens.CardInfo.route
+        }
+
         Surface(color = MaterialTheme.colors.background) {
             val drawerState = rememberDrawerState(DrawerValue.Closed)
             val scope = rememberCoroutineScope()
@@ -74,7 +120,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 NavHost(
                     navController = navController,
-                    startDestination = "login"
+                    startDestination = startDest
                 ) {
                     composable("login") {
                         LoginView(
@@ -90,7 +136,8 @@ class MainActivity : ComponentActivity() {
                         CardInfoView(
                             openDrawer = {
                                 openDrawer()
-                            }
+                            },
+                            navController = navController
                         )
                     }
                     composable(DrawerScreens.Account.route) {
@@ -115,7 +162,8 @@ class MainActivity : ComponentActivity() {
                         CreateOfferView(
                             openDrawer = {
                                 openDrawer()
-                            }
+                            },
+                            navController = navController
                         )
                     }
                     composable("findOffer") {
@@ -130,10 +178,20 @@ class MainActivity : ComponentActivity() {
                             it.arguments!!.getString("id")
                         )
                     }
+                    composable("camera") {
+                        SimpleCameraPreview()
+                    }
                 }
             }
         }
     }
+
+    companion object {
+        private const val REQUEST_CODE_PERMISSIONS = 10
+        private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+        private const val IMMERSIVE_FLAG_TIMEOUT = 500L
+    }
+
 
 //    public override fun onStart() {
 //        super.onStart()

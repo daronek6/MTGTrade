@@ -1,8 +1,10 @@
 package am.mtgtrade.app.ui.views.trade
 
 import am.mtgtrade.app.R
+import am.mtgtrade.app.TakenPhoto
 import am.mtgtrade.app.ui.TopBar
 import am.mtgtrade.app.ui.theme.AppTheme
+import am.mtgtrade.app.viewmodels.MakeOfferViewModel
 import am.mtgtrade.app.viewmodels.CreateOfferViewModel
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
@@ -20,24 +22,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.google.accompanist.glide.rememberGlidePainter
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun CreateOfferView(openDrawer: () -> Unit) {
+fun CreateOfferView(
+    viewModel: MakeOfferViewModel = hiltViewModel(),
+    openDrawer: () -> Unit,
+    navController: NavController
+) {
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
             title = "Create Offer",
             buttonIcon = Icons.Filled.Menu,
             onButtonClicked = { openDrawer() }
         )
-        ScaffoldedContent()
+        ScaffoldedContent(viewModel, navController)
     }
 }
 
 @Composable
-private fun ScaffoldedContent() {
+private fun ScaffoldedContent(
+    viewModel: MakeOfferViewModel,
+    navController: NavController
+) {
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*do something*/ }) {
+            FloatingActionButton(onClick = { navController.navigate("camera") }) {
                 Icon(painterResource(id = R.drawable.ic_baseline_photo_camera_24), contentDescription = "Turn on camera")
             }
         }
@@ -93,13 +105,20 @@ private fun CardNameInput(viewModel: CreateOfferViewModel = hiltViewModel()) {
 
 @Composable
 private fun CardImage() {
-    Image(
-        painter = painterResource(id = R.drawable.common_full_open_on_phone),
-        contentDescription = "Card's photo",
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(560.dp)
-    )
+    if (TakenPhoto.uri != null) {
+        Image(
+            painter = rememberGlidePainter(TakenPhoto.uri),
+            contentDescription = "Card's Photo"
+        )
+    } else {
+        Image(
+            painter = painterResource(id = R.drawable.common_full_open_on_phone),
+            contentDescription = "Card's photo",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(480.dp)
+        )
+    }
 }
 
 @Composable
@@ -119,17 +138,17 @@ private fun CreateOfferButton(viewModel: CreateOfferViewModel = hiltViewModel())
     }
 }
 
-@Preview(
-    name = "Night Mode",
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-)
-@Preview(
-    name = "Day Mode",
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-)
-@Composable
-private fun AccountScreenPreview() {
-    AppTheme {
-        ScaffoldedContent()
-    }
-}
+//@Preview(
+//    name = "Night Mode",
+//    uiMode = Configuration.UI_MODE_NIGHT_YES,
+//)
+//@Preview(
+//    name = "Day Mode",
+//    uiMode = Configuration.UI_MODE_NIGHT_NO,
+//)
+//@Composable
+//private fun AccountScreenPreview() {
+//    AppTheme {
+//        ScaffoldedContent()
+//    }
+//}
