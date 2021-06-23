@@ -4,7 +4,6 @@ import am.mtgtrade.app.R
 import am.mtgtrade.app.TakenPhoto
 import am.mtgtrade.app.ui.TopBar
 import am.mtgtrade.app.ui.theme.AppTheme
-import am.mtgtrade.app.viewmodels.MakeOfferViewModel
 import am.mtgtrade.app.viewmodels.CreateOfferViewModel
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
@@ -28,7 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun CreateOfferView(
-    viewModel: MakeOfferViewModel = hiltViewModel(),
+    viewModel: CreateOfferViewModel = hiltViewModel(),
     openDrawer: () -> Unit,
     navController: NavController
 ) {
@@ -44,7 +43,7 @@ fun CreateOfferView(
 
 @Composable
 private fun ScaffoldedContent(
-    viewModel: MakeOfferViewModel,
+    viewModel: CreateOfferViewModel,
     navController: NavController
 ) {
     Scaffold(
