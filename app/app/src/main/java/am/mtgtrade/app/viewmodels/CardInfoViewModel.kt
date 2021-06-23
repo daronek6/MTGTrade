@@ -1,12 +1,21 @@
 package am.mtgtrade.app.viewmodels
 
 import am.mtgtrade.app.ui.models.CardInfo
+import am.mtgtrade.app.util.TakenPhoto
 import am.mtgtrade.app.util.TypeConverter
+import android.content.ContentValues.TAG
+import android.content.Context
+import android.util.Log
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.TextRecognizerOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.magicthegathering.kotlinsdk.api.MtgCardApiClient
 import io.magicthegathering.kotlinsdk.model.card.MtgCard
 import kotlinx.coroutines.launch
@@ -15,7 +24,7 @@ import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
-class CardInfoViewModel @Inject constructor(): ViewModel() {
+class CardInfoViewModel @Inject constructor(@ApplicationContext private val context: Context): ViewModel() {
 
     private val _search = MutableLiveData<String>("")
     private val _cardInfo = MutableLiveData<CardInfo>()
@@ -63,7 +72,8 @@ class CardInfoViewModel @Inject constructor(): ViewModel() {
         }
     }
 
-
-
+    fun readTextFromImage() {
+        am.mtgtrade.app.util.TextRecognition.readTextFromImage(context, _search)
+    }
 
 }

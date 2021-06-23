@@ -3,8 +3,12 @@ package am.mtgtrade.app.ui.views.trade
 import am.mtgtrade.app.R
 import am.mtgtrade.app.ui.TopBar
 import am.mtgtrade.app.ui.theme.AppTheme
+import am.mtgtrade.app.util.TakenPhoto
 import am.mtgtrade.app.viewmodels.OfferInfoViewModel
+import android.content.ContentValues.TAG
 import android.content.res.Configuration
+import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.glide.rememberGlidePainter
 
 @Composable
 fun OfferInfoView(openDrawer: () -> Unit, userId: String?) {
@@ -34,14 +39,16 @@ fun OfferInfoView(openDrawer: () -> Unit, userId: String?) {
 }
 
 @Composable
-fun OfferInfoContent(userId: String?) {
+fun OfferInfoContent(userId: String?, viewModel: OfferInfoViewModel = hiltViewModel()) {
+    viewModel.onLoad(userId!!)
     OfferInfo(userId)
 }
 
 @Composable
 private fun OfferInfo(userId: String?, viewModel: OfferInfoViewModel = hiltViewModel()) {
     val offer by viewModel.offer.observeAsState(am.mtgtrade.app.ui.models.Offer())
-    viewModel.onLoad(userId!!)
+    val imageUri by viewModel.localImageUri.observeAsState(null)
+
     Card(
         shape = RoundedCornerShape(3.dp),
         modifier = Modifier
@@ -50,31 +57,41 @@ private fun OfferInfo(userId: String?, viewModel: OfferInfoViewModel = hiltViewM
         Column {
             Text(
                 text = "User: ${offer.userName}",
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(8.dp)
             )
             Text(
                 text = "Card's name: ${offer.cardName}",
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(8.dp)
             )
             Text(
                 text = "Date: ${offer.date}",
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(8.dp)
             )
             Text(
                 text = "Email: ${offer.userEmail}",
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(8.dp)
             )
             Text(
                 text = "Phone: ${offer.userPhone}",
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(8.dp)
             )
-            Image(
-                painter = painterResource(id = R.drawable.common_full_open_on_phone),
-                contentDescription = "Card's photo",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(300.dp)
-            )
+
+            if (imageUri != null) {
+                Image(
+                    painter = rememberGlidePainter(imageUri),
+                    contentDescription = "Card's Photo",
+                    Modifier.padding(24.dp, 0.dp)
+                        .fillMaxHeight(0.95f)
+                )
+            } else {
+                Image(
+                    painter = painterResource(id = R.drawable.common_full_open_on_phone),
+                    contentDescription = "Card's photo",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(480.dp)
+                )
+            }
         }
     }
 }

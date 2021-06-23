@@ -4,10 +4,12 @@ import am.mtgtrade.app.R
 import am.mtgtrade.app.ui.TopBar
 import am.mtgtrade.app.ui.models.Offer
 import am.mtgtrade.app.ui.theme.AppTheme
+import am.mtgtrade.app.util.TakenPhoto
 import am.mtgtrade.app.viewmodels.FindOfferViewModel
 import android.content.ContentValues.TAG
 import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,6 +30,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.accompanist.glide.rememberGlidePainter
 
 
 @Composable
@@ -70,6 +73,7 @@ fun FindOfferContent(navController: NavController) {
         ) {
             SearchInput()
             OffersColumn(navController)
+            CardInfoHack()
         }
     }
 }
@@ -128,7 +132,7 @@ private fun Offer(offer: Offer, navController: NavController) {
             .fillMaxWidth()
             .clickable {
                 navController.navigate("findOffer/${offer.id}")
-             }
+            }
     ) {
         Column() {
             LineOfInfo(text = "Username: ${offer.userName}")
@@ -137,6 +141,19 @@ private fun Offer(offer: Offer, navController: NavController) {
         }
     }
     Divider(color = Color.Blue, thickness = 1.dp)
+}
+@Composable
+private fun CardInfoHack(viewModel: FindOfferViewModel = hiltViewModel()) {
+    if (TakenPhoto.uri != null) {
+        viewModel.readTextFromImage()
+        Image(
+            painter = rememberGlidePainter(TakenPhoto.uri),
+            contentDescription = "Card's Photo",
+            Modifier
+                .fillMaxHeight(0.0f)
+                .fillMaxWidth(0.0f)
+        )
+    }
 }
 
 //@Preview(

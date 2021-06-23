@@ -2,6 +2,7 @@ package am.mtgtrade.app.viewmodels
 
 import am.mtgtrade.app.ui.models.Offer
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,10 +13,11 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 @HiltViewModel
-class FindOfferViewModel @Inject constructor(): ViewModel() {
+class FindOfferViewModel @Inject constructor(@ApplicationContext private val context: Context): ViewModel() {
 
     private var auth: FirebaseAuth = Firebase.auth
     val db = Firebase.firestore
@@ -43,4 +45,7 @@ class FindOfferViewModel @Inject constructor(): ViewModel() {
         return (auth.currentUser!!.email == offer.userEmail)
     }
 
+    fun readTextFromImage() {
+        am.mtgtrade.app.util.TextRecognition.readTextFromImage(context, _search)
+    }
 }

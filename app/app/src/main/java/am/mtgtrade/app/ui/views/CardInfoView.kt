@@ -1,7 +1,7 @@
 package am.mtgtrade.app.ui.views
 
 import am.mtgtrade.app.R
-import am.mtgtrade.app.TakenPhoto
+import am.mtgtrade.app.util.TakenPhoto
 import am.mtgtrade.app.ui.TopBar
 import am.mtgtrade.app.viewmodels.CardInfoViewModel
 import android.util.Log
@@ -77,9 +77,10 @@ fun CardInfoContent(viewModel: CardInfoViewModel) {
             Spacer(Modifier.height(16.dp))
 
             if (TakenPhoto.uri != null) {
+                viewModel.readTextFromImage()
                 Image(
                     painter = rememberGlidePainter(TakenPhoto.uri),
-                    contentDescription = "Card's Photo"
+                    contentDescription = "Card's Photo",
                 )
             }
         }

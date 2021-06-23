@@ -1,11 +1,10 @@
 package am.mtgtrade.app.ui.views.trade
 
 import am.mtgtrade.app.R
-import am.mtgtrade.app.TakenPhoto
+import am.mtgtrade.app.util.TakenPhoto
 import am.mtgtrade.app.ui.TopBar
-import am.mtgtrade.app.ui.theme.AppTheme
 import am.mtgtrade.app.viewmodels.CreateOfferViewModel
-import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -16,14 +15,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.glide.rememberGlidePainter
-import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun CreateOfferView(
@@ -103,11 +101,13 @@ private fun CardNameInput(viewModel: CreateOfferViewModel = hiltViewModel()) {
 }
 
 @Composable
-private fun CardImage() {
+private fun CardImage(viewModel: CreateOfferViewModel = hiltViewModel()) {
     if (TakenPhoto.uri != null) {
+        viewModel.readTextFromImage()
         Image(
             painter = rememberGlidePainter(TakenPhoto.uri),
-            contentDescription = "Card's Photo"
+            contentDescription = "Card's Photo",
+            Modifier.fillMaxHeight(0.8f)
         )
     } else {
         Image(
@@ -122,12 +122,16 @@ private fun CardImage() {
 
 @Composable
 private fun CreateOfferButton(viewModel: CreateOfferViewModel = hiltViewModel()) {
+    val context = LocalContext.current
     Button(
         colors = ButtonDefaults.buttonColors(
             backgroundColor = MaterialTheme.colors.secondary
         ),
         shape = MaterialTheme.shapes.medium,
-        onClick = { viewModel.onCreateOffer() },
+        onClick = {
+            val msg = viewModel.onCreateOffer()
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                  },
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)

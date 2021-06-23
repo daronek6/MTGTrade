@@ -1,7 +1,7 @@
 package am.mtgtrade.app.ui.views.camera
 
 import am.mtgtrade.app.R
-import am.mtgtrade.app.TakenPhoto
+import am.mtgtrade.app.util.TakenPhoto
 import android.content.Context
 import android.net.Uri
 import android.util.Log

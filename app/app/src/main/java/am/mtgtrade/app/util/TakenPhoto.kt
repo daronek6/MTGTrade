@@ -1,4 +1,4 @@
-package am.mtgtrade.app
+package am.mtgtrade.app.util
 
 import android.net.Uri
 
