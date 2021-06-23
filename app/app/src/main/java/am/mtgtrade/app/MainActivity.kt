@@ -165,14 +165,16 @@ class MainActivity : ComponentActivity() {
                         CreateOfferView(
                             openDrawer = {
                                 openDrawer()
-                            }
+                            },
+                            navController = navController
                         )
                     }
                     composable("findOffer") {
                         FindOfferView(
                             openDrawer = {
                                 openDrawer()
-                            }
+                            },
+                            navController = navController
                         )
                     }
                     composable("findOffer/{id}", arguments = listOf(navArgument("id") { type = NavType.LongType })) {
