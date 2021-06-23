@@ -21,10 +21,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavType
 import androidx.navigation.compose.navArgument
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import java.io.File
 
 
@@ -48,6 +51,24 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE_PERMISSIONS) {
+            if (allPermissionsGranted()) {
+                setViewContent()
+            } else {
+                Toast.makeText(
+                    this,
+                    getString(R.string.permission_message),
+                    Toast.LENGTH_SHORT
+                ).show()
+                finish()
+            }
+        }
+    }
+
     private fun setViewContent() {
         setContent {
             AppTheme {
@@ -65,6 +86,12 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun AppMainScreen() {
         val navController = rememberNavController()
+
+        val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        var startDest = "login"
+        if (user != null) {
+            startDest = DrawerScreens.CardInfo.route
+        }
 
         Surface(color = MaterialTheme.colors.background) {
             val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -93,7 +120,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 NavHost(
                     navController = navController,
-                    startDestination = "login"
+                    startDestination = startDest
                 ) {
                     composable("login") {
                         LoginView(
