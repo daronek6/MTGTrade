@@ -23,6 +23,9 @@ class CardInfoViewModel @Inject constructor(): ViewModel() {
     private val _rarity = MutableLiveData<String>("")
     private val _setName = MutableLiveData<String>("")
 
+    private val _uri = MutableLiveData<String>("")
+
+    val uri: LiveData<String> = _uri
     val search: LiveData<String> = _search
     val cardInfo: LiveData<CardInfo> = _cardInfo
     val name: LiveData<String> = _name
@@ -37,6 +40,10 @@ class CardInfoViewModel @Inject constructor(): ViewModel() {
         _name.value = _cardInfo.value!!.name
         _rarity.value = _cardInfo.value!!.rarity
         _setName.value = _cardInfo.value!!.setName
+    }
+
+    fun updatePhotoUri(newUri: String) {
+        _uri.value = newUri
     }
 
     fun onSearch() {

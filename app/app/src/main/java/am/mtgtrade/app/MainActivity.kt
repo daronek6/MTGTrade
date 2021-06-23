@@ -33,7 +33,6 @@ import java.io.File
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-//    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
 //        auth = Firebase.auth

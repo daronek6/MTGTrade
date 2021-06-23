@@ -83,7 +83,7 @@ dependencies {
     implementation "androidx.camera:camera-view:1.0.0-alpha25"
 
 
-    implementation "com.google.accompanist:accompanist-glide:0.8.1"
+    implementation "com.google.accompanist:accompanist-glide:0.11.1"
     //MTG api
     implementation 'io.magicthegathering:kotlinsdk:1.0.4'
 }

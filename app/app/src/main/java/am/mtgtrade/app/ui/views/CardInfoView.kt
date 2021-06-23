@@ -1,11 +1,11 @@
 package am.mtgtrade.app.ui.views
 
 import am.mtgtrade.app.R
+import am.mtgtrade.app.TakenPhoto
 import am.mtgtrade.app.ui.TopBar
-import am.mtgtrade.app.ui.theme.AppTheme
 import am.mtgtrade.app.viewmodels.CardInfoViewModel
-import android.content.res.Configuration
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -20,15 +20,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.glide.rememberGlidePainter
 
 @Composable
 fun CardInfoView(
+    viewModel: CardInfoViewModel = hiltViewModel(),
     openDrawer: () -> Unit,
     navController: NavController
 ) {
@@ -38,12 +38,12 @@ fun CardInfoView(
             buttonIcon = Icons.Filled.Menu,
             onButtonClicked = { openDrawer() }
         )
-        ScaffoldedContent(navController)
+        ScaffoldedContent(navController, viewModel)
     }
 }
 
 @Composable
-private fun ScaffoldedContent(navController: NavController) {
+private fun ScaffoldedContent(navController: NavController, viewModel: CardInfoViewModel) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { navController.navigate("camera") }) {
@@ -51,12 +51,12 @@ private fun ScaffoldedContent(navController: NavController) {
             }
         }
     ) {
-        CardInfoContent()
+        CardInfoContent(viewModel)
     }
 }
 
 @Composable
-fun CardInfoContent() {
+fun CardInfoContent(viewModel: CardInfoViewModel) {
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier
@@ -75,6 +75,13 @@ fun CardInfoContent() {
             CardInfo()
 
             Spacer(Modifier.height(16.dp))
+
+            if (TakenPhoto.uri != null) {
+                Image(
+                    painter = rememberGlidePainter(TakenPhoto.uri),
+                    contentDescription = "Card's Photo"
+                )
+            }
         }
     }
 }
@@ -165,17 +172,17 @@ fun CardInfo(viewModel: CardInfoViewModel = hiltViewModel()) {
 
 }
 
-@Preview(
-    name = "Night Mode",
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-)
-@Preview(
-    name = "Day Mode",
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-)
-@Composable
-private fun CardInfoScreenPreview() {
-    AppTheme {
-        ScaffoldedContent(navController = rememberNavController())
-    }
-}
+//@Preview(
+//    name = "Night Mode",
+//    uiMode = Configuration.UI_MODE_NIGHT_YES,
+//)
+//@Preview(
+//    name = "Day Mode",
+//    uiMode = Configuration.UI_MODE_NIGHT_NO,
+//)
+//@Composable
+//private fun CardInfoScreenPreview() {
+//    AppTheme {
+//        ScaffoldedContent(navController = rememberNavController())
+//    }
+//}
