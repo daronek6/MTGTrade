@@ -13,6 +13,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -80,18 +82,36 @@ private fun OfferInfo(userId: String?, viewModel: OfferInfoViewModel = hiltViewM
                 Image(
                     painter = rememberGlidePainter(imageUri),
                     contentDescription = "Card's Photo",
-                    Modifier.padding(24.dp, 0.dp)
+                    Modifier
+                        .padding(24.dp, 0.dp)
                         .fillMaxHeight(0.95f)
                 )
             } else {
-                Image(
-                    painter = painterResource(id = R.drawable.common_full_open_on_phone),
-                    contentDescription = "Card's photo",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(480.dp)
-                )
+                CircularIndeterminateProgressBar(isDisplayed = true)
+//                Image(
+//                    painter = painterResource(id = R.drawable.common_full_open_on_phone),
+//                    contentDescription = "Card's photo",
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(480.dp)
+//                )
             }
+        }
+    }
+}
+
+@Composable
+fun CircularIndeterminateProgressBar(isDisplayed: Boolean) {
+    if (isDisplayed) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            CircularProgressIndicator(
+                color = MaterialTheme.colors.primary
+            )
         }
     }
 }
