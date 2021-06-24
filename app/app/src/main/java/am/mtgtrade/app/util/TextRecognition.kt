@@ -18,7 +18,12 @@ object TextRecognition {
                 .addOnSuccessListener { visionText ->
                     Log.d(ContentValues.TAG,"Wow recognised some text POG! ${visionText.text}")
 
-                    _fieldToUpdate.value = visionText.textBlocks.first().text
+                    try {
+                        _fieldToUpdate.value = visionText.textBlocks.first().text
+                    } catch (e:NoSuchElementException) {
+                        _fieldToUpdate.value = "scan again!"
+                    }
+
                 }
                 .addOnFailureListener { e ->
                     Log.d(ContentValues.TAG,"Didn't recognise text :(")
